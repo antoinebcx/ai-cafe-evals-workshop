@@ -58,13 +58,13 @@ This is an open exercise. Treat the steps below as a rhythm, not a checklist. Th
 
 1. **Smoke test (1 min).** Run the eval. The structural metric passes everywhere (the cache is well-formed). 100% pass means *nothing is graded yet* — that's where you come in.
 
-2. **Read before you grade (4 min).** Open `dataset.jsonl` and `outputs.jsonl` side by side for a few cases. Suggested: 011, 012, 023, 025, 032, 035, 040. Ask yourself for each one: *what would a careful human flag as wrong here?* That list is your eval design brief.
+2. **Read before you grade (5 min).** Open `dataset.jsonl` and `outputs.jsonl` side by side for a few cases. Suggested: 011, 012, 023, 025, 032, 035, 040. Ask yourself for each one: *what would a careful human flag as wrong here?* That list is your eval design brief.
 
-3. **Pick your dimensions (2 min).** `eval.py` lists candidate dimensions — deterministic, judge-based, operational. Pick 3-5 you care about. Don't try to grade everything. The discipline of choosing is part of the lesson.
+3. **Pick your dimensions (3 min).** `eval.py` lists candidate dimensions — deterministic, judge-based, operational. Pick 3-5 you care about. Don't try to grade everything. The discipline of choosing is part of the lesson.
 
-4. **Design and implement (10 min).** Write a metric for each dimension. For deterministic ones, the implementation is short — the design question is what counts as pass/fail. For judge ones, the design question is the *prompt*: rubric, scale, what context to include, reasoning before or after the score. `call_judge` does the API work; you bring the eval logic.
+4. **Design and implement (15 min).** Write a metric for each dimension. For deterministic ones, the implementation is short — the design question is what counts as pass/fail. For judge ones, the design question is the *prompt*: rubric, scale, what context to include, reasoning before or after the score. `call_judge` does the API work; you bring the eval logic.
 
-5. **Run and look at failures (2 min).** Read the per-case failure messages — printed to stdout and also written as a timestamped markdown file to `runs/` so you can compare iterations. Some failures will be real bugs in the system. Some will be your eval being too strict. Both are useful signals.
+5. **Run and look at failures (5 min).** Read the per-case failure messages — printed to stdout and also written as a timestamped markdown file to `runs/` so you can compare iterations. Some failures will be real bugs in the system. Some will be your eval being too strict. Both are useful signals.
 
 6. **Debrief (1 min).**
 
