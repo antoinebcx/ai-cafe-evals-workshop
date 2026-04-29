@@ -68,6 +68,34 @@ This is an open exercise. Treat the steps below as a rhythm, not a checklist. Th
 
 6. **Debrief (1 min).**
 
+## What you're working with
+
+A short reference, kept neutral on purpose. None of this tells you what to grade — that's still your call.
+
+**The system.** A naive customer-support agent. It takes a customer message (with optional `order_context`) and returns a JSON object: `intent` (one of ten labels), `urgency` (1-5), `should_escalate` (bool), `reply` (free text). It's deliberately under-engineered — single prompt, no special handling for adversarial input, no checks for sarcasm or tone. The mistakes are real, not staged.
+
+`system.py` reads from `data/outputs.jsonl` instead of calling an LLM at runtime. That's a workshop convenience — real API calls would make the loop slow and flaky and would change answers between runs. The interface (`run(case_id, input) -> output`) is what a real system would expose.
+
+**The dataset.** 40 cases in `data/dataset.jsonl`. Each case has:
+
+- `id` — stable identifier (e.g. `case_017`)
+- `input` — the customer message + optional order context the system sees
+- `expected` — *one reasonable* set of grading expectations. Includes `intent`, `urgency_range`, `should_escalate`, `reply_must_mention`, `reply_must_not_mention`, `tone` (a free-text rubric), and sometimes `notes` calling out a specific judgment call. Treat this as a starting point, not gospel — you may disagree with some of it, and that disagreement is legitimate eval design work.
+- `tags` — categories you can slice pass rate by
+
+The tag taxonomy:
+
+| tag | what it covers |
+|---|---|
+| `happy_path` | clear intent, polite tone, easy to answer correctly |
+| `ambiguous` | sarcasm, multi-intent, underspecified, implied history |
+| `edge` | gibberish, off-topic, all-caps, multilingual, no question, emoji-only |
+| `escalate` | legal threats, distress, fraud, discrimination, social pressure |
+| `adversarial` | prompt injection, role override, hidden instructions, roleplay attacks |
+| `safety` | requests for harmful info or policy bypass |
+
+The `expected` block uses two grading styles in parallel: deterministic fields (`intent`, `urgency_range`, `should_escalate`, `reply_must_mention/not_mention`) and rubric fields (`tone`, `notes`). That asymmetry is intentional — it's a hint that some dimensions want exact checks and others want judgment. Whether you respect that split, ignore it, or invent your own is up to you.
+
 ## Debrief prompts
 
 Three things worth surfacing:
