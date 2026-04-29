@@ -99,6 +99,13 @@
     border-top: 1px solid var(--rule);
     line-height: 1.5;
   }
+  p.definition {
+    font-style: italic;
+    font-size: clamp(20px, 1.7vw, 26px);
+    color: var(--fg-soft);
+    margin: -20px 0 36px;
+    line-height: 1.45;
+  }
 
   ul { padding-left: 0; margin: 0; list-style: none; }
   ul.checks li {
@@ -272,7 +279,7 @@
       <ul class="checks">
         <li>There is rarely a single correct answer to assert against. Every input has many valid replies and many wrong ones.</li>
         <li>Behaviour shifts with every change — a prompt edit, a model upgrade, a different retrieval context. The diff often shows nothing.</li>
-        <li>Manual review does not scale, does not survive a prompt change, and does not catch drift.</li>
+        <li>Manual review does not scale and does not survive a prompt change — but you will still need it to bootstrap and calibrate the eval suite itself.</li>
       </ul>
       <p class="note">You need quantitative, multi-case, repeatable measurement.</p>
     </div>
@@ -286,7 +293,7 @@
       <ul class="checks">
         <li>In deterministic software, code encodes the rules and tests verify them.</li>
         <li>With LLMs, the model is opaque and probabilistic. The eval suite is the only place where <em>what we want</em> is written down unambiguously.</li>
-        <li>Two engineers reading the same brief will write different evals. The eval is what forces the team to commit to a single interpretation.</li>
+        <li>The eval is what forces the team to commit to a single interpretation.</li>
       </ul>
       <blockquote>If you do not know what to grade, you do not know what you are building.</blockquote>
     </div>
@@ -307,13 +314,13 @@
         <div class="card">
           <div class="family">LLM-as-judge</div>
           <div class="examples">rubric + small integer scale</div>
-          <p>Right for subjective dimensions: tone, factuality, intent. Have the judge reason before producing the score — otherwise the reasoning becomes post-hoc justification.</p>
+          <p>Right for subjective dimensions — tone, factuality, intent.</p>
           <p class="caveat">The judge is its own model. Calibrate it against ~20 hand-graded cases before you trust its scores.</p>
         </div>
         <div class="card">
           <div class="family">Operational</div>
           <div class="examples">latency · cost · length · tokens</div>
-          <p>A quality gain that doubles cost is not a win. Track p50 and p95, not averages.</p>
+          <p>A quality gain that doubles cost and latency is not necessarily a win.</p>
           <p class="caveat">Cost compounds. A run that is cheap in dev can break the budget at production scale.</p>
         </div>
       </div>
@@ -326,6 +333,7 @@
     <div class="slide-inner">
       <div class="eyebrow">04 · The dataset</div>
       <h2>Fifty curated cases beat five thousand noisy ones.</h2>
+      <p class="definition">An evaluation dataset is a set of inputs, each paired with what good output looks like — sometimes an exact answer, sometimes a rubric.</p>
       <ul class="checks">
         <li>Eval quality is upper-bounded by dataset quality. Hand-pick the seed.</li>
         <li>Tag every case (<span class="kbd">happy_path</span>, <span class="kbd">edge_case</span>, <span class="kbd">adversarial</span>…) so you read pass rate <em>per slice</em>, not one global number.</li>
@@ -335,10 +343,18 @@
     </div>
   </section>
 
-  <!-- 6. THE LOOP -->
+  <!-- 6. WHAT EVALS UNLOCK -->
+  <section class="slide is-hero">
+    <div class="slide-inner">
+      <div class="eyebrow">05 · What evals unlock</div>
+      <h1 class="hero">Once the eval is solid, <em>the agent can do the searching</em>.</h1>
+    </div>
+  </section>
+
+  <!-- 7. THE LOOP -->
   <section class="slide slide-loop">
     <div class="slide-inner">
-      <div class="eyebrow">05 · The loop</div>
+      <div class="eyebrow">06 · The loop</div>
       <h2>An eval suite is never finished.<br/>The dataset grows from production.</h2>
       <figure>
         <svg viewBox="0 0 960 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eval feedback loop: dataset feeds the system under test, whose outputs are scored and gated by CI; production failures feed back into the dataset.">
@@ -407,7 +423,7 @@
 </div>
 
 <div class="chrome">
-  <div><span id="counter">1 / 7</span></div>
+  <div><span id="counter">1 / 8</span></div>
   <div>← → · space</div>
 </div>
 
